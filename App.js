@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function App() {
+  const [newTodoItem, setTodoItem] = useState('');
+
+  const addTodoHandler = () => {
+    console.log(newTodoItem);
+  };
+
+  const todoInputHandler = (enteredText) => {
+    setTodoItem(enteredText);
+  };
+
   return (
     <View style={styles.screen}>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="New to-do item" style={styles.textInput} />
-        <Button style={styles.inputButton} title="add" />
+        <TextInput 
+          onChangeText={todoInputHandler} 
+          placeholder="New to-do item" 
+          style={styles.textInput} 
+          value={newTodoItem}
+        />
+        <Button 
+          onPress={addTodoHandler} 
+          style={styles.inputButton} 
+          title="add" 
+        />
       </View>
       <View>
 
