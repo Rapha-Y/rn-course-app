@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function App() {
-  const [newTodoItem, setTodoItem] = useState('');
+  const [newTodoItem, setNewTodoItem] = useState('');
+  const [todoItems, setTodoItems] = useState([]);
 
   const addTodoHandler = () => {
-    console.log(newTodoItem);
+    setTodoItems(todoItems => [...todoItems, newTodoItem]);
   };
 
   const todoInputHandler = (enteredText) => {
-    setTodoItem(enteredText);
+    setNewTodoItem(enteredText);
   };
 
   return (
@@ -22,22 +23,22 @@ export default function App() {
           value={newTodoItem}
         />
         <Button 
-          onPress={addTodoHandler} 
-          style={styles.inputButton} 
+          onPress={addTodoHandler}
           title="add" 
         />
       </View>
       <View>
-
+        {todoItems.map(todo => (
+          <View key={todo} style={styles.todoItem}>
+            <Text>{todo}</Text>
+          </View>
+        ))}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputButton: {
-    flex: 1,
-  },
   inputContainer: {
     alignItems: 'center', 
     flexDirection: 'row', 
@@ -49,9 +50,16 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderBottomColor: 'black', 
-    borderWidth: 1, 
-    flex: 1, 
+    borderWidth: 1,
     paddingHorizontal: 10, 
     paddingVertical: 5,
+    width: '82%',
+  },
+  todoItem: {
+    backgroundColor: 'pink',
+    borderColor: 'black',
+    borderWidth: 1,
+    marginTop: 10,
+    padding: 10,
   },
 });
