@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function App() {
   const [newTodoItem, setNewTodoItem] = useState('');
   const [todoItems, setTodoItems] = useState([]);
 
   const addTodoHandler = () => {
-    setTodoItems(todoItems => [...todoItems, newTodoItem]);
+    setTodoItems(todoItems => [...todoItems, {id: Math.random().toString(), value: newTodoItem}]);
   };
 
   const todoInputHandler = (enteredText) => {
@@ -27,13 +27,15 @@ export default function App() {
           title="add" 
         />
       </View>
-      <View>
-        {todoItems.map(todo => (
-          <View key={todo} style={styles.todoItem}>
-            <Text>{todo}</Text>
+      <FlatList 
+        data={todoItems} 
+        keyExtractor={(item, index) => item.id}
+        renderItem={itemData => (
+          <View style={styles.todoItem}>
+            <Text>{itemData.item.value}</Text>
           </View>
-        ))}
-      </View>
+        )} 
+      />
     </View>
   );
 }
