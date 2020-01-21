@@ -10,6 +10,12 @@ export default function App() {
     setTodoItems(todoItems => [...todoItems, {id: Math.random().toString(), value: todoTitle}]);
   };
 
+  const removeTodoHandler = todoId => {
+    setTodoItems(todoItems => {
+      return todoItems.filter((todo) => todo.id !== todoId);
+    });
+  };
+
   return (
     <View style={styles.screen}>
       <TodoInput onAddTodo={addTodoHandler} />
@@ -17,7 +23,7 @@ export default function App() {
         data={todoItems} 
         keyExtractor={(item, index) => item.id}
         renderItem={itemData => (
-          <TodoItem title={itemData.item.value} />
+          <TodoItem id={itemData.item.id} onDelete={removeTodoHandler} title={itemData.item.value} />
         )} 
       />
     </View>
