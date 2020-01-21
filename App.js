@@ -1,39 +1,29 @@
 import React, { useState } from 'react';
-import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
+import TodoInput from './components/TodoInput.js';
+import TodoItem from './components/TodoItem.js';
 
 export default function App() {
-  const [newTodoItem, setNewTodoItem] = useState('');
   const [todoItems, setTodoItems] = useState([]);
 
-  const addTodoHandler = () => {
-    setTodoItems(todoItems => [...todoItems, {id: Math.random().toString(), value: newTodoItem}]);
+  const addTodoHandler = todoTitle => {
+    setTodoItems(todoItems => [...todoItems, {id: Math.random().toString(), value: todoTitle}]);
   };
 
-  const todoInputHandler = (enteredText) => {
-    setNewTodoItem(enteredText);
+  const removeTodoHandler = todoId => {
+    setTodoItems(todoItems => {
+      return todoItems.filter((todo) => todo.id !== todoId);
+    });
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput 
-          onChangeText={todoInputHandler} 
-          placeholder="New to-do item" 
-          style={styles.textInput} 
-          value={newTodoItem}
-        />
-        <Button 
-          onPress={addTodoHandler}
-          title="add" 
-        />
-      </View>
+      <TodoInput onAddTodo={addTodoHandler} />
       <FlatList 
         data={todoItems} 
         keyExtractor={(item, index) => item.id}
         renderItem={itemData => (
-          <View style={styles.todoItem}>
-            <Text>{itemData.item.value}</Text>
-          </View>
+          <TodoItem id={itemData.item.id} onDelete={removeTodoHandler} title={itemData.item.value} />
         )} 
       />
     </View>
@@ -41,27 +31,8 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    alignItems: 'center', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between',
-  },
   screen: {
     paddingHorizontal: 20, 
     paddingVertical: 40,
-  },
-  textInput: {
-    borderBottomColor: 'black', 
-    borderWidth: 1,
-    paddingHorizontal: 10, 
-    paddingVertical: 5,
-    width: '82%',
-  },
-  todoItem: {
-    backgroundColor: 'pink',
-    borderColor: 'black',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 10,
   },
 });
